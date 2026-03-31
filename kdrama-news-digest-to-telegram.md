@@ -1,35 +1,35 @@
 # K-Drama News Digest to Telegram
 
-## Summary
+## Кратко
 
-This workflow automates a niche media digest for K-drama and Asian entertainment news. It collects updates from multiple RSS feeds, fetches article pages, extracts useful content, uses AI to prepare post text, and sends the result to Telegram with an image.
+Этот workflow автоматизирует тематический дайджест по K-drama и азиатским развлекательным новостям. Он собирает обновления из нескольких RSS-источников, загружает страницы статей, извлекает нужный контент, подготавливает текст с помощью AI и отправляет результат в Telegram вместе с изображением.
 
-## What it demonstrates
+## Что показывает этот workflow
 
-- Multi-feed content aggregation
-- Entertainment/news automation for a themed audience
-- HTTP and HTML parsing inside n8n
-- AI-assisted text preparation
-- Merging structured and scraped data
-- Telegram publishing with media
+- Агрегацию контента из нескольких источников
+- Тематическую новостную автоматизацию под конкретную аудиторию
+- Использование HTTP и HTML-парсинга в n8n
+- AI-подготовку текста
+- Объединение структурированных и извлеченных данных
+- Публикацию медиа-контента в Telegram
 
-## Workflow logic
+## Логика работы
 
-1. Several RSS triggers listen to drama-related sources.
-2. Feed items are merged into a single flow.
-3. Article pages are downloaded through HTTP Request.
-4. Relevant HTML content is extracted.
-5. AI prepares publishable text.
-6. JavaScript combines image and text fields.
-7. Telegram sends the final post as a photo message.
+1. Несколько RSS Trigger отслеживают тематические источники.
+2. Элементы из разных фидов объединяются в один поток.
+3. Страницы статей загружаются через HTTP Request.
+4. Из HTML извлекается полезное содержимое.
+5. AI подготавливает текст для публикации.
+6. JavaScript объединяет текст и изображение.
+7. Telegram отправляет итоговый пост как фото-сообщение.
 
-## Why it is good for a portfolio
+## Почему это хорошо для портфолио
 
-This workflow is useful in a portfolio because it shows that you can build themed editorial automation, not just generic bot flows. It has a clear audience, multiple integrations, and a finished delivery channel.
+Этот workflow хорошо смотрится в портфолио, потому что показывает не просто техническую сборку, а готовую редакционную автоматизацию под конкретную нишу и канал доставки.
 
-## Setup notes
+## Что нужно для запуска
 
-- Recreate Telegram credentials
-- Recreate Google Gemini credentials
-- Replace the Telegram chat ID
-- Review feed quality and posting frequency before production use
+- Заново создать Telegram credentials
+- Заново создать credentials для Google Gemini
+- Подставить свой Telegram chat ID
+- Проверить качество и частоту публикаций у выбранных источников

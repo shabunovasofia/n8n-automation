@@ -1,36 +1,36 @@
 # AI Science News Digest with Content Filter
 
-## Summary
+## Кратко
 
-This workflow builds an automated content pipeline that collects articles from several RSS feeds, filters out unwanted topics, extracts page content, generates text with AI, pairs the generated text with an article image, and publishes the result to Telegram.
+Этот workflow собирает статьи из нескольких RSS-источников, отфильтровывает нежелательные темы, извлекает содержимое страниц, генерирует итоговый текст с помощью AI, связывает текст с изображением статьи и публикует результат в Telegram.
 
-## What it demonstrates
+## Что показывает этот workflow
 
-- Multi-source RSS ingestion
-- Content extraction from article pages
-- JavaScript data transformation inside n8n
-- Topic filtering and moderation logic
-- Google Gemini integration for AI-generated output
-- Telegram channel publishing
+- Сбор данных из нескольких RSS-источников
+- Извлечение содержимого веб-страниц
+- JavaScript-обработку данных внутри n8n
+- Логику фильтрации и модерации контента
+- Интеграцию с Google Gemini
+- Публикацию в Telegram-канал
 
-## Workflow logic
+## Логика работы
 
-1. RSS triggers monitor multiple content sources.
-2. A JavaScript node blocks unwanted topics and unsafe categories.
-3. The workflow merges incoming feed data.
-4. The article page is fetched with HTTP Request.
-5. HTML content is extracted from the page.
-6. Gemini generates the final text.
-7. Another JavaScript node combines image and generated text into one payload.
-8. Telegram publishes the final post with an image.
+1. Несколько RSS Trigger отслеживают разные источники.
+2. JavaScript-узел отфильтровывает нежелательные темы и категории.
+3. Потоки данных объединяются.
+4. Страница статьи загружается через HTTP Request.
+5. Из HTML извлекается нужное содержимое.
+6. Gemini генерирует итоговый текст.
+7. Второй JavaScript-узел объединяет изображение и текст в один объект.
+8. Telegram публикует готовый пост с изображением.
 
-## Why it is good for a portfolio
+## Почему это хорошо для портфолио
 
-This is one of the strongest files in the folder because it shows real orchestration work: aggregation, moderation, extraction, AI processing, transformation, and delivery in one end-to-end automation.
+Это один из самых сильных workflow в подборке, потому что он показывает полноценную автоматизацию: агрегацию, фильтрацию, парсинг, AI-обработку, преобразование данных и доставку результата.
 
-## Setup notes
+## Что нужно для запуска
 
-- Recreate Telegram credentials
-- Recreate Google Gemini credentials
-- Replace the destination Telegram chat ID
-- Check whether the RSS feeds are still active before reuse
+- Заново создать Telegram credentials
+- Заново создать credentials для Google Gemini
+- Подставить свой Telegram chat ID
+- Проверить актуальность RSS-источников перед использованием

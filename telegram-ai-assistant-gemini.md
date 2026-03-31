@@ -1,33 +1,33 @@
 # Telegram AI Assistant with Gemini
 
-## Summary
+## Кратко
 
-This workflow implements a Telegram bot that accepts user messages, checks whether the sender is allowed to use the bot, and then generates a response through a Google Gemini model.
+Этот workflow реализует Telegram-бота, который принимает сообщения от пользователя, проверяет, есть ли у него доступ, и затем генерирует ответ через модель Google Gemini.
 
-## What it demonstrates
+## Что показывает этот workflow
 
-- Integration between Telegram and n8n
-- AI agent setup with Google Gemini
-- Session memory for short conversation context
-- Access control through conditional logic
-- Separate handling for authorized and unauthorized users
+- Интеграцию Telegram и n8n
+- Подключение AI-агента через Google Gemini
+- Память диалога для короткого контекста
+- Контроль доступа через условную логику
+- Раздельную обработку разрешенных и неразрешенных пользователей
 
-## Workflow logic
+## Логика работы
 
-1. Telegram trigger receives an incoming message.
-2. `If` node verifies the sender ID.
-3. Allowed users are passed to the AI Agent.
-4. The AI Agent uses Gemini plus memory to generate a reply.
-5. The response is sent back to Telegram.
-6. Unauthorized users receive a denial message.
+1. Telegram Trigger получает входящее сообщение.
+2. Узел `If` проверяет ID отправителя.
+3. Разрешенные пользователи передаются в AI Agent.
+4. AI Agent использует Gemini и память диалога для генерации ответа.
+5. Ответ отправляется обратно в Telegram.
+6. Пользователи без доступа получают отдельное сообщение.
 
-## Why it is good for a portfolio
+## Почему это хорошо для портфолио
 
-This is a solid showcase piece because it combines chatbot automation, LLM integration, stateful memory, and permission control inside one practical workflow.
+Это сильный пример, потому что в одном workflow объединены чат-автоматизация, интеграция с LLM, работа с памятью и базовый контроль доступа.
 
-## Setup notes
+## Что нужно для запуска
 
-- Recreate Telegram credentials in n8n
-- Recreate Google Gemini credentials
-- Update the allowed Telegram user ID if needed
-- Test in a private Telegram chat before public use
+- Заново создать Telegram credentials в n8n
+- Заново создать credentials для Google Gemini
+- Подставить свой Telegram user ID
+- Протестировать workflow в личном чате перед использованием

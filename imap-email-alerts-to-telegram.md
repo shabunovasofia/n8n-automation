@@ -1,30 +1,30 @@
 # IMAP Email Alerts to Telegram
 
-## Summary
+## Кратко
 
-This workflow monitors an email inbox through IMAP and forwards new message details to Telegram in a formatted notification.
+Этот workflow отслеживает входящие письма по IMAP и пересылает в Telegram уведомление с основными данными письма в удобном формате.
 
-## What it demonstrates
+## Что показывает этот workflow
 
-- IMAP integration in n8n
-- Real-time or polling-based email monitoring
-- Data cleanup and formatting through Set/Edit Fields
-- Telegram notification delivery
+- Интеграцию IMAP в n8n
+- Мониторинг почты через триггер
+- Подготовку и форматирование данных через Set/Edit Fields
+- Доставку уведомлений в Telegram
 
-## Workflow logic
+## Логика работы
 
-1. IMAP email trigger watches the mailbox.
-2. Email metadata is prepared for output.
-3. A Telegram message is generated with sender, subject, recipient, date, and text.
-4. The notification is delivered to Telegram.
+1. IMAP Trigger отслеживает почтовый ящик.
+2. Данные письма подготавливаются для вывода.
+3. Формируется сообщение с темой, отправителем, получателем, датой и текстом письма.
+4. Уведомление отправляется в Telegram.
 
-## Why it is good for a portfolio
+## Почему это хорошо для портфолио
 
-This is a smaller workflow, but it is still worth showing as a compact practical automation. It proves experience with server-side triggers, message formatting, and alerting workflows.
+Это небольшой workflow, но он хорошо показывает практическую автоматизацию уведомлений, работу с почтовыми триггерами и подготовку данных для отправки в мессенджер.
 
-## Setup notes
+## Что нужно для запуска
 
-- Recreate IMAP credentials
-- Recreate Telegram credentials
-- Replace the target Telegram chat ID
-- Check mailbox permissions and trigger mode
+- Заново создать IMAP credentials
+- Заново создать Telegram credentials
+- Подставить свой Telegram chat ID
+- Проверить доступы к почтовому ящику и режим работы триггера
