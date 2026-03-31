@@ -1,0 +1,358 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://dramapanda.com/feed/"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        -64
+      ],
+      "id": "ae92b694-366a-4b32-83ad-8eaa61af0ace",
+      "name": "RSS Feed Trigger"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-robotics-er-1.5-preview",
+          "mode": "list",
+          "cachedResultName": "models/gemini-robotics-er-1.5-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Ты — редактор интересных новостей для Telegram-канала. \nСделай так, чтобы текст был креативным, увлекательным и лёгким для чтения. \nСократи исходную статью до 3–5 предложений, сохрани все факты. \nТы — креативный редактор Telegram-канала о корейских и китайских дорамах. Твоя задача — превращать новости из мира азиатского кинематографа в яркие и интригующие посты, от которых фанаты не смогут пройти мимо.\n\nЗадача:\n\n1. Цепляющий заголовок: Придумай короткий и интригующий заголовок, который создает вау-эффект. Выдели его жирным шрифтом <b>.\n2. Суть новости: Перескажи ключевые факты из статьи всего в 3-5 предложениях. Сохрани всю важную информацию (названия, имена актеров, даты, главные события), но изложи это динамично и увлекательно.\n3. Язык: Говори со своей аудиторией на одном языке — используй эмоции, интригу, но без спойлеров!\n4. Оформление: В конце добавь кликабельную ссылку на источник в формате: Источник: <a href=\"ССЫЛКА\">Ссылка</a>.\n5. Важно: Не касайся политических тем.\n\nИсходная статья для переработки:\n{{ $json.contentSnippet }}\n\nСсылка на источник:\n{{ $json.link }}\n\nНачни свой ответ сразу с заголовка в теге <b>.\n\n---\n\nНе используй политические темы. \nВ конце дай ссылку на источник. \nТакже переводя на русский старайся подбирать более подходящие контексту слова.\n\nЕсли в статье присутствует название сериала выделеляй его. Выдели его жирным шрифтом <b>. Можно применить также тег code для простоты копирования.\n\nРазделяй текст на абзацы, чтобы пользователю было легче читать текст. (например абзац 2 предложения, другой абзац 3 предложения)\n\nВообще при написании ответа пользуйся именно HTML структурой а не markdown и тп. \n\nПоддерживаемые теги:\nТекст и форматирование:\n\n<b> жирный текст\n\n<strong> жирный текст (аналог <b>)\n\n<i> курсив\n\n<em> курсив (аналог <i>)\n\n<u> <u>подчеркнутый</u>\n\n<ins> <u>подчеркнутый</u> (аналог <u>)\n\n<s> ~~зачеркнутый~~\n\n<strike> ~~зачеркнутый~~ (аналог <s>)\n\n<del> ~~зачеркнутый~~ (аналог <s>)\n\n<code> моноширинный шрифт\n\n<pre> блок кода с сохранением форматирования\n\n<blockquote> цитата (обычно с отступом)\n\n\nТекст статьи:\n{{ $json.contentSnippet }}\nСсылка на источник:\n{{ $json.link }}\n\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        752,
+        -208
+      ],
+      "id": "c0b8f067-ba78-40b5-87c2-05567deed3c7",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CqKlmALGRKxfABpS",
+          "name": "shababListGem"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://cdramalove.com/feed/"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        -208
+      ],
+      "id": "290dbf48-b4d0-49a7-bada-19f15331bb7a",
+      "name": "RSS Feed Trigger1"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://soompi.com/feed/"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        256
+      ],
+      "id": "a30a7721-8ec0-4d5f-8072-27218fffaa32",
+      "name": "RSS Feed Trigger2"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        336,
+        16
+      ],
+      "id": "d86f07f3-3de0-4eb9-a1b4-64941af5f751",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "image",
+              "cssSelector": "meta[property=\"og:image\"]",
+              "returnValue": "attribute",
+              "attribute": "content"
+            }
+          ]
+        },
+        "options": {
+          "trimValues": false
+        }
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        80
+      ],
+      "id": "d0af8356-b56d-4d6b-baba-5881dcbfe23e",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "file": "={{ $json.image }}",
+        "replyMarkup": "inlineKeyboard",
+        "additionalFields": {
+          "caption": "={{ $json.text }}",
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1536,
+        384
+      ],
+      "id": "885cf435-b7f9-4edd-9de4-4e52a37d06c4",
+      "name": "Send a photo message",
+      "webhookId": "REPLACE_AFTER_IMPORT",
+      "credentials": {
+        "telegramApi": {
+          "id": "DQ4isGKI7kl6ONYj",
+          "name": "dorama"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1328,
+        -144
+      ],
+      "id": "f775cafd-bc1e-40b0-bbd8-82aed6da7ec8",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const arr = $input.all();\n\nconst textObj = arr.find(item => item.json.content);\nconst imageObj = arr.find(item => item.json.image);\n\nreturn {\n  json: {\n    text: textObj.json.content.parts[0].text,\n    image: imageObj.json.image\n  }\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        448
+      ],
+      "id": "3a7a4a33-c311-4d84-a90f-945cfed7a5f1",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://rss.app/feeds/QUSxWIeD2wJrATCt.xml"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        -928,
+        96
+      ],
+      "id": "64093eb7-65e3-4d64-99e1-f73fa2da3243",
+      "name": "RSS Feed Trigger3"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -64,
+        -208
+      ],
+      "id": "269d0ec9-738e-4e8b-bc20-40ea3cfc07b4",
+      "name": "Merge1"
+    }
+  ],
+  "connections": {
+    "RSS Feed Trigger": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Trigger3": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:RSS Feed Trigger": {
+      "lastItemDate": "2025-12-03T13:06:54.000Z"
+    },
+    "node:RSS Feed Trigger1": {
+      "lastItemDate": "2024-03-22T17:30:31.000Z"
+    },
+    "node:RSS Feed Trigger2": {
+      "lastItemDate": "2025-12-04T06:53:12.000Z"
+    },
+    "node:RSS Feed Trigger3": {
+      "lastItemDate": "2025-11-25T18:56:56.000Z"
+    }
+  },
+  "pinData": {},
+  "triggerCount": 4,
+  "meta": null
+}

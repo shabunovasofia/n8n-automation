@@ -1,0 +1,122 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "873a0d17-02e0-4e43-a57f-16a04ee8d532",
+      "name": "Email Trigger (IMAP)",
+      "credentials": {
+        "imap": {
+          "id": "DizYerSFammEML2N",
+          "name": "IMAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ \"📨 НОВОЕ ПИСЬМО\\n📋 Тема: \" + $json.subject + \"\\n👤 Отправитель: \" + $json.from + \"\\n👥 Получатель: \" + $json.to + \"\\n📅 Дата: \" + $json.date + \"\\n📝 Текст: \" + $json.text}}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "a8aa9080-2f3a-4572-b0b7-23fbafb2ef71",
+      "name": "Send a text message",
+      "webhookId": "REPLACE_AFTER_IMPORT",
+      "credentials": {
+        "telegramApi": {
+          "id": "FP2UW9gjTcZ2xWZV",
+          "name": "shabList"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7d8b8412-0315-4f8e-ab5d-82155d0fc476",
+              "name": "from",
+              "value": "={{ $json.from }}",
+              "type": "string"
+            },
+            {
+              "id": "8ee4079d-a585-4f19-9afe-4fe3231ae206",
+              "name": "subject",
+              "value": "={{ $json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "d99563bc-638e-4b1c-9143-b629231e42be",
+              "name": "text",
+              "value": "={{ $json.textPlain }}",
+              "type": "string"
+            },
+            {
+              "id": "c15f282a-8eb5-48ac-9a49-9a334eee19fd",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d4a516cb-39f0-4837-8824-a45ee7eb3477",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "Email Trigger (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

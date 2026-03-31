@@ -1,0 +1,384 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://www.popsci.com/rss"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        -480
+      ],
+      "id": "bb12c395-379d-4a43-8f2a-c312bd84d04a",
+      "name": "RSS Feed Trigger"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-robotics-er-1.5-preview",
+          "mode": "list",
+          "cachedResultName": "models/gemini-robotics-er-1.5-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Ты — профессиональный редактор яркого и популярного Telegram-канала. Твоя задача — подготовить новостной пост.\n\nИнструкция по форматированию:\n\n1. Заголовок: Выдели жирным шрифтом с помощью тега <b>. Он должен быть коротким и цепляющим.\n2. Текст новости: Краткий, ясный и легко читаемый.\n3. Источник: В конце добавь кликабельную ссылку в формате: Источник: <a href=\"ССЫЛКА\">Название источника или URL</a>.\n4. Общий формат: Используй только разрешенные HTML-теги для parse_mode=HTML. Не используй маркдаун.\n\nСтилистические требования к тексту:\n\n· Перепиши статью заново, сделав ее свежей, динамичной и запоминающейся.\n· Сильно сократи: уложись в 3-5 предложений, сохранив все ключевые факты.\n· Избегай: скучных формулировок, канцелярита, политических тем.\n· Цель: Читатель должен сразу понять суть и заинтересоваться.\n\nТекст статьи для обработки:\n{{ $json.contentSnippet }}\n\nСсылка на источник:\n{{ $json.link }}\n\nНачни свой ответ сразу с заголовка в теге <b>, без вводных слов.\n\nТакже лучше чтобы текст был разбит на абзацы (например по 1-2 предложения - 1 абзац)\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1184,
+        -688
+      ],
+      "id": "59f90ed9-e7b3-4ebd-abc5-599d8f39738e",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CqKlmALGRKxfABpS",
+          "name": "shababListGem"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1056,
+        -32
+      ],
+      "id": "e1e7884f-7c21-4fff-abb3-8da0ea9c7655",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "image",
+              "cssSelector": "meta[property=\"og:image\"]",
+              "returnValue": "attribute",
+              "attribute": "content"
+            }
+          ]
+        },
+        "options": {
+          "trimValues": false
+        }
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1248,
+        176
+      ],
+      "id": "7dbda4a3-81e5-454e-a35b-072f55e593db",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "file": "={{ $json.image }}",
+        "replyMarkup": "inlineKeyboard",
+        "additionalFields": {
+          "caption": "={{ $json.text }}",
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2352,
+        208
+      ],
+      "id": "dbf5defa-71a3-4ac7-b5d3-7850f5666424",
+      "name": "Send a photo message",
+      "webhookId": "REPLACE_AFTER_IMPORT",
+      "credentials": {
+        "telegramApi": {
+          "id": "FP2UW9gjTcZ2xWZV",
+          "name": "shabList"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1712,
+        -176
+      ],
+      "id": "d3053d01-5bf4-4ad7-86dc-dbdfa6cdee1b",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const arr = $input.all();\n\nconst textObj = arr.find(item => item.json.content);\nconst imageObj = arr.find(item => item.json.image);\n\nreturn {\n  json: {\n    text: textObj.json.content.parts[0].text,\n    image: imageObj.json.image\n  }\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1984,
+        -32
+      ],
+      "id": "431260b9-c7d7-4d98-a78a-a9d248410e55",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://nplus1.ru/rss"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        -192
+      ],
+      "id": "3bfb0383-4b86-4f37-b7e5-29c840149b26",
+      "name": "RSS Feed Trigger1"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        464,
+        -496
+      ],
+      "id": "3739ba37-d58f-4789-a7a8-a921217f7b5b",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://rss.app/feeds/yHDq0MfvxEEVkQDN.xml"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        -384,
+        -48
+      ],
+      "id": "686c5b4d-65d0-41c2-b526-34a8fc628d41",
+      "name": "RSS Feed Trigger2"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://rss.app/feeds/LKagLGddiGXpfSJe.xml"
+      },
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        80
+      ],
+      "id": "9ff7f93c-1f64-4e2e-9cbf-c9926f0b2ac4",
+      "name": "RSS Feed Trigger3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Получаем данные из RSS\nconst article = $input.first().json;\nconst title = article.title?.toLowerCase() || '';\nconst description = article.contentSnippet?.toLowerCase() || '';\nconst content = title + ' ' + description;\n\n// Расширенный список запрещенных слов на русском и английском\nconst bannedKeywords = [\n  // ====== ПОЛИТИКА ======\n  // Международная политика\n  'trump', 'biden', 'putin', 'zelensky', 'кремл', 'белый дом', 'congress',\n  'senate', 'парламент', 'правительство', 'администрация',\n  \n  // Военные конфликты\n  'war', 'война', 'invasion', 'вторжение', 'military', 'военн', 'санкц',\n  'sanction', 'nato', 'нато', 'оруж', 'weapon', 'армия',\n  \n  // Выборы и протесты\n  'election', 'выбор', 'protest', 'протест', 'rally', 'митинг', 'революц',\n  'revolution', 'impeachment', 'импичмент',\n  \n  // Политические термины\n  'political', 'политик', 'democrat', 'republican', 'либерал', 'консерватив',\n  'government', 'правительство', 'партия', 'party',\n\n  // ====== 18+ КОНТЕНТ ======\n  // Секс и отношения\n  'sex', 'секс', 'porn', 'порно', 'xxx', 'erotic', 'эротик', 'intimate',\n  'интим', 'adult', 'для взрослых', 'hooker', 'prostitut', 'проституц',\n  'escort', 'эскорт', 'blowjob', 'минёт', 'handjob', 'orgasm', 'оргазм',\n  \n  // Анатомия и физиология\n  'penis', 'пенис', 'dick', 'член', 'vagina', 'влагалище', 'pussy', 'киска',\n  'breast', 'грудь', 'boob', 'сиськ', 'ass', 'задниц', 'butt', 'попа',\n  \n  // Насилие и преступления\n  'rape', 'изнасилование', 'abuse', 'abus', 'насилие', 'murder', 'убийств',\n  'corpse', 'труп', 'blood', 'кровь', 'violence', 'жестокость',\n  \n  // Наркотики и алкоголь\n  'drug', 'наркотик', 'cocaine', 'кокаин', 'heroin', 'героин', 'marijuana',\n  'марихуан', 'weed', 'алкогол', 'alcohol', 'пьян', 'drunk', 'hangover',\n  \n  // ====== НЕНАВИСТЬ И ДИСКРИМИНАЦИЯ ======\n  'racist', 'расист', 'nazi', 'наци', 'fascist', 'фашист', 'homophob',\n  'гомофоб', 'transphob', 'трансфоб', 'hate speech', 'ненавист',\n  \n  // ====== ШОК-КОНТЕНТ ======\n  'gore', 'горе', 'massacre', 'резня', 'terror', 'террор', 'suicide',\n  'самоубийство', 'accident', 'авария', 'catastrophe', 'катастроф'\n];\n\n// Проверяем каждый пункт из бана\nconst hasBannedContent = bannedKeywords.some(keyword => {\n  return content.includes(keyword.toLowerCase());\n});\n\n// Дополнительная проверка по контексту (можно расширить)\nconst contextCheck = (text) => {\n  const dangerousPatterns = [\n    /(война|war).*(украин|russia)/i,\n    /(политик|politic).*(скандал|scandal)/i,\n    /(убийств|murder).*(дет|child)/i,\n    /(наркотик|drug).*(продаж|deal)/i\n  ];\n  \n  return dangerousPatterns.some(pattern => pattern.test(text));\n};\n\n// Финальное решение - баним статью\nif (hasBannedContent || contextCheck(content)) {\n  console.log('Статья заблокирована по содержанию:', title);\n  return [];\n}\n\n// Если проверка пройдена - возвращаем статью\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        80
+      ],
+      "id": "cc16d451-afa6-49c3-9879-58ac6215ff0c",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "connections": {
+    "RSS Feed Trigger": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "RSS Feed Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "RSS Feed Trigger3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:RSS Feed Trigger": {
+      "lastItemDate": "2025-12-03T20:26:00.000Z"
+    },
+    "node:RSS Feed Trigger1": {
+      "lastItemDate": "2025-12-04T05:13:00.000Z"
+    },
+    "node:RSS Feed Trigger2": {
+      "lastItemDate": "2025-11-25T19:11:31.000Z"
+    },
+    "node:RSS Feed Trigger3": {
+      "lastItemDate": "2025-11-25T18:22:51.000Z"
+    }
+  },
+  "pinData": {},
+  "triggerCount": 4,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
